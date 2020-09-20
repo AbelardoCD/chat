@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+<RelativeLayout
+    android:layout_margin="10dp"
+    android:background="@drawable/item_list_style"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_marginLeft="15dp"
+        android:id="@+id/userImage"
+        android:layout_width="150dp"
+        android:layout_centerVertical="true"
+        android:layout_height="150dp"/>
+
+    <TextView
+        android:id="@+id/userNameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnAgregar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="60dp"
+        android:layout_toEndOf="@+id/userImage"
+        android:layout_toRightOf="@+id/userImage"
+        android:gravity="center"
+        android:text="USUARIO"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/solicitudEnviadaTxt"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:gravity="center"
+        android:layout_above="@+id/btnAgregar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="85dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="81dp"
+        android:layout_marginBottom="19dp"
+        android:layout_toEndOf="@+id/userImage"
+        android:layout_toRightOf="@+id/userImage" />
+
+    <Button
+        android:id="@+id/btnAgregar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="40dp"
+        android:textColor="@color/whiteBody"
+
+        android:background="@drawable/btn_style"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="63dp"
+        android:layout_marginBottom="28dp"
+        android:layout_toEndOf="@+id/userImage"
+        android:layout_toRightOf="@+id/userImage"
+        android:text="Agregar" />
+</RelativeLayout>
+
+</LinearLayout>
