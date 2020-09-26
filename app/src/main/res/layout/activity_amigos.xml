@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Home">
-
+    android:layout_height="match_parent"
+    tools:context=".amigos">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -17,6 +16,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+
                 android:id="@+id/btnImg"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
@@ -53,10 +53,12 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/listViewUsuarios"
+            android:id="@+id/listViewAmigos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/linearBotton" />
+            android:layout_height="match_parent"
+            android:layout_above="@+id/linearBotton"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp" />
 
         <LinearLayout
             android:id="@+id/linearBotton"
@@ -70,7 +72,7 @@
             <ImageButton
                 android:id="@+id/btnModuloHomeH"
                 android:layout_width="0dp"
-                android:background="@color/primarySecond"
+                android:background="@color/colorPrimary"
                 android:src="@drawable/ic_home"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -78,39 +80,39 @@
                 android:id="@+id/btnModuloMensajesH"
                 android:layout_width="0dp"
                 android:src="@drawable/ic_mensajes"
-                android:background="@color/colorPrimary"
+                android:background="@color/primarySecond"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
 
-                    <ImageButton
-                        android:id="@+id/btnModuloNotificacionH"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorPrimary"
-                        android:src="@drawable/ic_notificacion" />
+                <ImageButton
+                    android:id="@+id/btnModuloNotificacionH"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/ic_notificacion" />
 
-                    <TextView
-                        android:id="@+id/txtNotifications"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="28dp"
-                        android:layout_marginRight="28dp"
-                        android:layout_marginBottom="21dp"
-                        android:background="@drawable/contador_notification"
+                <TextView
+                    android:id="@+id/txtNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="28dp"
+                    android:layout_marginRight="28dp"
+                    android:layout_marginBottom="21dp"
+                    android:background="@drawable/contador_notification"
 
-                        android:gravity="center"
-                        android:textColor="@color/whiteBody"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                    android:gravity="center"
+                    android:textColor="@color/whiteBody"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
         </LinearLayout>
 

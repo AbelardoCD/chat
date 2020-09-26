@@ -20,7 +20,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_home.btnImg
+
+import kotlinx.android.synthetic.main.activity_home.progresBarImage
+import kotlinx.android.synthetic.main.activity_home.txtNotifications
+import kotlinx.android.synthetic.main.activity_home.userName
 import kotlinx.android.synthetic.main.activity_home.view.*
+import kotlinx.android.synthetic.main.activity_notifications.*
 import kotlinx.android.synthetic.main.item_user.*
 import kotlinx.android.synthetic.main.item_user.view.*
 import java.io.IOException
@@ -44,10 +50,17 @@ class Home : AppCompatActivity() {
     /*Variables para listar los usuarios*/
     lateinit var lista: MutableList<user>
     lateinit var view: ListView
+
+    /****************VARIABLES ENVIAR MEDIANTE PUT EXTRA ENTRE VENTANAS**********************/
+    lateinit var userEmail:String
+    lateinit var userId:String
+    lateinit var userUrlImage:String
+    lateinit var userNameBD:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
+        accionBotonesModulos()
 
         /*Variables firebase*/
         database = FirebaseDatabase.getInstance()
@@ -60,6 +73,7 @@ class Home : AppCompatActivity() {
         /****************************************/
         val valores = intent.extras
         var email = valores?.getString("email")
+        userEmail = email.toString()
         idUsuario = ""
 
         getUserName(email.toString())
@@ -68,7 +82,6 @@ class Home : AppCompatActivity() {
         lista = mutableListOf()
         view = findViewById(R.id.listViewUsuarios)
 
-        getUsuarios()
 
 
     }
@@ -87,12 +100,18 @@ class Home : AppCompatActivity() {
                 for (dato in snapshot.children) {
                     val nombre = dato.getValue(user::class.java)
                     userName.text = nombre?.Nombre
+                   userNameBD = nombre?.Nombre.toString()
+
                     idUsuario = nombre?.idUser.toString()
+                    userId = nombre?.idUser.toString()
+                    getSolicitudes(idUsuario)
+                    getUsuarios(idUsuario)
 
                     println("idUsuario : " + idUsuario)
                     urlImagDelete = nombre?.urlFoto!!
                     //validamos que la url no este basia
                     if (nombre?.urlFoto!!.isNotEmpty()) {
+                        userUrlImage = nombre?.urlFoto.toString()
                         Glide.with(this@Home).load(nombre.urlFoto).circleCrop().into(btnImg)
 
                     }
@@ -166,6 +185,7 @@ class Home : AppCompatActivity() {
     }
 
     fun guardarUrlUsuarioCorrespondiente(url: Uri) {
+        userUrlImage = url.toString()
 
 
         reference.child(idUsuario.toString()).child("urlFoto").setValue(url.toString())
@@ -211,8 +231,7 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun getUsuarios() {
-
+    private fun getUsuarios(id:String) {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -223,7 +242,8 @@ class Home : AppCompatActivity() {
                     lista.clear()
                     for (data in snapshot.children) {
                         val objectUser = data.getValue(user::class.java)
-                        if (objectUser?.idUser.equals(idUsuario)) {
+                        // println("comparacion user: " + objectUser?.idUser  + " " + id)
+                        if (objectUser?.idUser.equals(id)) {
                         } else {
                             lista.add(objectUser!!)
                         }
@@ -238,6 +258,55 @@ class Home : AppCompatActivity() {
     }
 
 
+    private fun getSolicitudes(id:String){
+        println("desde get solicitudes" + id)
+        var contadorSolicitudes:Int=0
+        reference.child(id).child("solicitudes").addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+          if (snapshot.exists()){
+              for (data in snapshot.children){
+                  contadorSolicitudes ++
+              }
+
+              txtNotifications.text =contadorSolicitudes.toString()
 
 
+          }
+            }
+
+        })
+
+
+    }
+
+     private fun accionBotonesModulos() {
+
+         btnModuloNotificacionH.setOnClickListener {
+             val intent = Intent(this, notifications::class.java).apply {
+                 putExtra("email", userEmail)
+                 putExtra("name", userNameBD)
+                 putExtra("urlImage", userUrlImage)
+                 putExtra("idUser", idUsuario)
+             }
+             startActivity(intent)
+             onBackPressed()
+         }
+
+
+         btnModuloMensajesH.setOnClickListener {
+             val intent = Intent(this, amigos::class.java).apply {
+                 putExtra("email", userEmail)
+                 putExtra("name", userNameBD)
+                 putExtra("urlImage", userUrlImage)
+                 putExtra("idUser", idUsuario)
+             }
+             startActivity(intent)
+
+
+         }
+     }
 }

@@ -17,6 +17,6 @@ class user {
     }
 
     override fun toString(): String {
-        return Nombre +" " + Email
+        return idUser
     }
 }
