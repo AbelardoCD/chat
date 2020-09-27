@@ -17,7 +17,9 @@ class adapter_mensaje(
     private val listaMensajes: List<mensaje>,
     private val idContacto: String,
     private val nombrContacto: String,
-    private val nombreUsuarioLogeado: String
+    private val nombreUsuarioLogeado: String,
+    private val urlcontacto:String,
+    private val urlImageUsuarioLogeado:String
 
 ) :
     ArrayAdapter<mensaje>(mcontext, 0, listaMensajes) {
@@ -32,6 +34,7 @@ class adapter_mensaje(
 
                 layout.nombreEmisor.text = nombreUsuarioLogeado
                 layout.txtMensajeEmisor.text = mensaje.mensaje
+                Glide.with(mcontext).load(urlImageUsuarioLogeado).circleCrop().into(layout.img_userLogeado)
 
         } else {
             layout = LayoutInflater.from(context).inflate(com.example.chat.R.layout.item_mensaje, parent, false)
@@ -39,6 +42,7 @@ class adapter_mensaje(
 
                 layout.nombre.text = nombrContacto
                 layout.txtmensaje.text = mensaje.mensaje
+            Glide.with(mcontext).load(urlcontacto).circleCrop().into(layout.img)
 
         }
 

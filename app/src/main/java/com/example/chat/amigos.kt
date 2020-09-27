@@ -91,6 +91,7 @@ class amigos : AppCompatActivity() {
                 putExtra("url", lista[i].urlFoto)
                 putExtra("idUsuarioLogeado", idUser)
                 putExtra("nombreUsuarioLogeado",name)
+                putExtra("urlImagenUserLogeado",urlImage)
             }
             startActivity(intent)
 

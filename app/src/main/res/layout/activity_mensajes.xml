@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/img_circle"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_silueta_de_usuario" />
 
 
         </RelativeLayout>
@@ -52,6 +52,8 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/linearBotton"
             android:layout_alignParentTop="true"
+            android:divider="@null"
+
             android:layout_marginTop="0dp" />
 
         <LinearLayout

@@ -23,6 +23,7 @@ class mensajes : AppCompatActivity() {
     lateinit var email: String
     lateinit var userLogado: String
     lateinit var nombreUsuarioLogeado:String
+    lateinit var urlImagenUserLogeado:String
 
     lateinit var coneccion: firebaseInstance
     lateinit var referencia: DatabaseReference
@@ -35,7 +36,8 @@ class mensajes : AppCompatActivity() {
 
         coneccion = firebaseInstance()
         referencia = coneccion.getConection("Mensajeria")
-    listaMensajes = mutableListOf()
+        listaMensajes = mutableListOf()
+
         enviarMensaje()
         getMensajes()
     }
@@ -54,7 +56,7 @@ private fun getMensajes(){
                     val mensaje = data.getValue(mensaje::class.java)
                     listaMensajes.add(mensaje!!)
 
-                    val adp = adapter_mensaje(this@mensajes,listaMensajes,idContacto,name,nombreUsuarioLogeado)
+                 val adp = adapter_mensaje(this@mensajes,listaMensajes,idContacto,name,nombreUsuarioLogeado,urlImage,urlImagenUserLogeado)
                     listViewMensajes.adapter =adp
                 }
             }
@@ -71,7 +73,7 @@ private fun getMensajes(){
 
             mensajeReceptor.push().setValue(nuevoMensaje)
             mensajeEmisor.push().setValue(nuevoMensaje).addOnCompleteListener {
-
+                txtMensaje.setText("")
             }
 
 
@@ -86,7 +88,7 @@ private fun getMensajes(){
         idContacto = datosEnviadosEntreVentanas?.getString("idUser").toString()
         userLogado = datosEnviadosEntreVentanas?.getString("idUsuarioLogeado").toString()
         nombreUsuarioLogeado = datosEnviadosEntreVentanas?.getString("nombreUsuarioLogeado").toString()
-
+        urlImagenUserLogeado =datosEnviadosEntreVentanas?.getString("urlImagenUserLogeado").toString()
         textNombreContacto.text = name
         Glide.with(this).load(urlImage).circleCrop().into(imgContacto)
 
