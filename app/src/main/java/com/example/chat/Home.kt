@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
@@ -52,11 +51,13 @@ class Home : AppCompatActivity() {
     lateinit var view: ListView
 
     /****************VARIABLES ENVIAR MEDIANTE PUT EXTRA ENTRE VENTANAS**********************/
-    lateinit var userEmail:String
-    lateinit var userId:String
-    lateinit var userUrlImage:String
-    lateinit var userNameBD:String
+    lateinit var userEmail: String
+    lateinit var userId: String
+    lateinit var userUrlImage: String
+    lateinit var userNameBD: String
 
+    lateinit var arrayAmigos: MutableList<String>
+    lateinit var arrayTodosUsuarios: MutableList<user>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -82,6 +83,8 @@ class Home : AppCompatActivity() {
         lista = mutableListOf()
         view = findViewById(R.id.listViewUsuarios)
 
+        arrayAmigos = mutableListOf()
+        arrayTodosUsuarios = mutableListOf()
 
 
     }
@@ -100,12 +103,12 @@ class Home : AppCompatActivity() {
                 for (dato in snapshot.children) {
                     val nombre = dato.getValue(user::class.java)
                     userName.text = nombre?.Nombre
-                   userNameBD = nombre?.Nombre.toString()
+                    userNameBD = nombre?.Nombre.toString()
 
                     idUsuario = nombre?.idUser.toString()
                     userId = nombre?.idUser.toString()
                     getSolicitudes(idUsuario)
-                    getUsuarios(idUsuario)
+                    getAmigos(idUsuario)
 
                     println("idUsuario : " + idUsuario)
                     urlImagDelete = nombre?.urlFoto!!
@@ -231,7 +234,27 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun getUsuarios(id:String) {
+    private fun getAmigos(id: String) {
+
+        reference.child(id).child("amigos").addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChildren()) {
+                   for (data in snapshot.children) {
+
+                        arrayAmigos.add(data.key.toString())
+                    }
+                getTodosUsers(id)
+                }
+            }
+
+        })
+    }
+
+    fun getTodosUsers(id:String) {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -239,43 +262,55 @@ class Home : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot!!.exists()) {
-                    lista.clear()
-                    for (data in snapshot.children) {
-                        val objectUser = data.getValue(user::class.java)
-                        // println("comparacion user: " + objectUser?.idUser  + " " + id)
-                        if (objectUser?.idUser.equals(id)) {
-                        } else {
-                            lista.add(objectUser!!)
-                        }
-                    }
-                    val adp = userAdapter(this@Home, lista, idUsuario)
-                    view.adapter = adp
 
+                    for (data in snapshot.children) {
+                        arrayTodosUsuarios.add(data.getValue(user::class.java)!!)
+                    }
+                    getValidacion(id)
                 }
             }
         })
-
     }
 
+    fun getValidacion(id:String){
 
-    private fun getSolicitudes(id:String){
+
+        for (dato in arrayTodosUsuarios) {
+            if (arrayAmigos.contains(dato.idUser)){
+
+            }else
+            {
+                if (dato?.idUser.equals(id)) {
+                } else {
+                    lista.add(dato)
+                }
+
+                val adp = userAdapter(this@Home, lista, idUsuario)
+                view.adapter = adp
+
+            }
+        }
+
+
+    }
+    private fun getSolicitudes(id: String) {
         println("desde get solicitudes" + id)
-        var contadorSolicitudes:Int=0
+        var contadorSolicitudes: Int = 0
         reference.child(id).child("solicitudes").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-          if (snapshot.exists()){
-              for (data in snapshot.children){
-                  contadorSolicitudes ++
-              }
+                if (snapshot.exists()) {
+                    for (data in snapshot.children) {
+                        contadorSolicitudes++
+                    }
 
-              txtNotifications.text =contadorSolicitudes.toString()
+                    txtNotifications.text = contadorSolicitudes.toString()
 
 
-          }
+                }
             }
 
         })
@@ -283,30 +318,30 @@ class Home : AppCompatActivity() {
 
     }
 
-     private fun accionBotonesModulos() {
+    private fun accionBotonesModulos() {
 
-         btnModuloNotificacionH.setOnClickListener {
-             val intent = Intent(this, notifications::class.java).apply {
-                 putExtra("email", userEmail)
-                 putExtra("name", userNameBD)
-                 putExtra("urlImage", userUrlImage)
-                 putExtra("idUser", idUsuario)
-             }
-             startActivity(intent)
-             onBackPressed()
-         }
-
-
-         btnModuloMensajesH.setOnClickListener {
-             val intent = Intent(this, amigos::class.java).apply {
-                 putExtra("email", userEmail)
-                 putExtra("name", userNameBD)
-                 putExtra("urlImage", userUrlImage)
-                 putExtra("idUser", idUsuario)
-             }
-             startActivity(intent)
+        btnModuloNotificacionH.setOnClickListener {
+            val intent = Intent(this, notifications::class.java).apply {
+                putExtra("email", userEmail)
+                putExtra("name", userNameBD)
+                putExtra("urlImage", userUrlImage)
+                putExtra("idUser", idUsuario)
+            }
+            startActivity(intent)
+            onBackPressed()
+        }
 
 
-         }
-     }
+        btnModuloMensajesH.setOnClickListener {
+            val intent = Intent(this, amigos::class.java).apply {
+                putExtra("email", userEmail)
+                putExtra("name", userNameBD)
+                putExtra("urlImage", userUrlImage)
+                putExtra("idUser", idUsuario)
+            }
+            startActivity(intent)
+
+
+        }
+    }
 }

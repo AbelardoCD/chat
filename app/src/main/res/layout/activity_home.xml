@@ -55,8 +55,10 @@
         <ListView
             android:id="@+id/listViewUsuarios"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/linearBotton" />
+            android:layout_height="match_parent"
+            android:layout_above="@+id/linearBotton"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp" />
 
         <LinearLayout
             android:id="@+id/linearBotton"
