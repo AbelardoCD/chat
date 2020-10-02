@@ -26,7 +26,13 @@ class userAdapter(
         val layout =
             LayoutInflater.from(context).inflate(com.example.chat.R.layout.item_user, parent, false)
         val user = listaUsuarios[position]
+        val solicitudes = user.solicitudes?.keys
 
+        if (solicitudes != null) {
+            if(solicitudes.contains(idUsuarioLogeado)){
+                layout.solicitudEnviadaTxt.text = "Solicitud Enviada"
+            }
+        }
 
         layout.userNameView.text = user.Nombre
         Glide.with(mcontext).load(user.urlFoto).circleCrop().into(layout.userImage)

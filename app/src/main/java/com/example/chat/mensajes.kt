@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_mensajes.*
 import kotlinx.android.synthetic.main.activity_notifications.*
+import java.text.SimpleDateFormat
 
 class mensajes : AppCompatActivity() {
 
@@ -67,7 +68,7 @@ private fun getMensajes(){
     private fun enviarMensaje() {
         btnEnviarMensaje.setOnClickListener {
 
-            val nuevoMensaje = mensaje(txtMensaje.text.toString(), userLogado)
+            val nuevoMensaje = mensaje(txtMensaje.text.toString(), userLogado,getTime())
             val mensajeReceptor =   referencia.child(userLogado).child(idContacto)
             val mensajeEmisor =   referencia.child(idContacto).child(userLogado)
 
@@ -79,7 +80,13 @@ private fun getMensajes(){
 
         }
     }
+    private fun getTime():String{
+        val date = System.currentTimeMillis()
 
+        val sdf = SimpleDateFormat("MM dd yyyy h:mm a")
+        val dateString = sdf.format(date)
+        return dateString
+    }
     private fun getDatosEnviadosEntreVentana() {
 
         val datosEnviadosEntreVentanas = intent.extras

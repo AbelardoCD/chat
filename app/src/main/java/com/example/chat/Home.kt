@@ -4,31 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.*
+import android.widget.ListView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.chat.adapter.userAdapter
 import com.example.chat.clases.user
-import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_home.btnImg
-
-import kotlinx.android.synthetic.main.activity_home.progresBarImage
-import kotlinx.android.synthetic.main.activity_home.txtNotifications
-import kotlinx.android.synthetic.main.activity_home.userName
-import kotlinx.android.synthetic.main.activity_home.view.*
-import kotlinx.android.synthetic.main.activity_notifications.*
-import kotlinx.android.synthetic.main.item_user.*
-import kotlinx.android.synthetic.main.item_user.view.*
 import java.io.IOException
+import java.text.SimpleDateFormat
 
 class Home : AppCompatActivity() {
     lateinit var database: FirebaseDatabase
@@ -243,26 +235,29 @@ class Home : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.hasChildren()) {
-                   for (data in snapshot.children) {
+                    lista.clear()
+                    arrayAmigos.clear()
+                    for (data in snapshot.children) {
 
                         arrayAmigos.add(data.key.toString())
                     }
-                getTodosUsers(id)
+                    getTodosUsers(id)
                 }
             }
 
         })
     }
 
-    fun getTodosUsers(id:String) {
+    fun getTodosUsers(id: String) {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot!!.exists()) {
-
+                if (snapshot.exists()) {
+                    lista.clear()
+                    arrayTodosUsuarios.clear()
                     for (data in snapshot.children) {
                         arrayTodosUsuarios.add(data.getValue(user::class.java)!!)
                     }
@@ -272,27 +267,26 @@ class Home : AppCompatActivity() {
         })
     }
 
-    fun getValidacion(id:String){
 
+    fun getValidacion(id: String) {
 
         for (dato in arrayTodosUsuarios) {
-            if (arrayAmigos.contains(dato.idUser)){
 
-            }else
-            {
+            if (arrayAmigos.contains(dato.idUser)) {
+            } else {
+
                 if (dato?.idUser.equals(id)) {
                 } else {
                     lista.add(dato)
                 }
 
-                val adp = userAdapter(this@Home, lista, idUsuario)
-                view.adapter = adp
-
             }
         }
 
-
+        val adp = userAdapter(this@Home, lista, idUsuario)
+        view.adapter = adp
     }
+
     private fun getSolicitudes(id: String) {
         println("desde get solicitudes" + id)
         var contadorSolicitudes: Int = 0
